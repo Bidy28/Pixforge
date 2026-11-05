@@ -1,0 +1,10 @@
+# Configuration du déploiement Netlify
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+# Application React (BrowserRouter) : toutes les routes renvoient vers index.html
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
