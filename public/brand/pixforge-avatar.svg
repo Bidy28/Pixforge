@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" role="img" aria-label="PixForge">
+  <defs>
+    <linearGradient id="pixforge" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#1e8bff"/>
+      <stop offset="1" stop-color="#0059cc"/>
+    </linearGradient>
+  </defs>
+  <rect width="1024" height="1024" fill="url(#pixforge)"/>
+  <path d="M333,224 H437 V800 H333 Z M437,224 A254,179 0 0 1 437,582 Z M437,403 A75,75 0 1 1 587,403 A75,75 0 1 1 437,403 Z" fill="#ffffff" fill-rule="evenodd"/>
+</svg>

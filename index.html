@@ -12,7 +12,8 @@
     <meta property="og:type" content="website" />
     <meta property="og:title" content="PixForge · Studio de développement web" />
     <meta property="og:description" content="Sites web, applications métier et solutions numériques sur mesure." />
-    <meta name="theme-color" content="#f8fafc" />
+    <meta name="theme-color" content="#fbfbfd" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)" />
     <script>
       /* Applique le thème avant le premier rendu pour éviter le flash. */
       (function () {
@@ -23,6 +24,14 @@
             : (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
           document.documentElement.dataset.theme = theme;
           document.documentElement.style.colorScheme = theme;
+
+          /*
+           * Arme les apparitions au défilement avant le premier rendu : sans
+           * cette classe, le CSS laisse tout visible (voir src/hooks/useReveal.js).
+           */
+          if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            document.documentElement.classList.add('reveal-ready');
+          }
         } catch (e) {}
       })();
     </script>

@@ -1,7 +1,12 @@
+/*
+ * Ordre identique à celui des sections de la page d'accueil : le visiteur
+ * retrouve dans le menu la progression qu'il voit en défilant.
+ * `id` sert à mettre en évidence la section visible.
+ */
 export const navItems = [
-  { label: 'Accueil', to: '/' },
-  { label: 'Réalisations', to: '/#realisations' },
-  { label: 'Services', to: '/#services' },
-  { label: 'À propos', to: '/#a-propos' },
-  { label: 'Contact', to: '/#contact' },
+  { label: 'Services', to: '/#services', id: 'services' },
+  { label: 'Réalisations', to: '/#realisations', id: 'realisations' },
+  { label: 'Méthode', to: '/#methodologie', id: 'methodologie' },
+  { label: 'À propos', to: '/#a-propos', id: 'a-propos' },
+  { label: 'Contact', to: '/#contact', id: 'contact' },
 ];

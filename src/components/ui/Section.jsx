@@ -1,7 +1,7 @@
 export default function Section({ id, className = '', children }) {
   return (
-    <section id={id} className={`scroll-mt-24 py-20 sm:py-28 ${className}`}>
-      <div className="mx-auto w-full max-w-6xl px-5 sm:px-8">{children}</div>
+    <section id={id} className={`scroll-mt-20 py-24 sm:py-32 ${className}`}>
+      <div className="mx-auto w-full max-w-content px-6 sm:px-8">{children}</div>
     </section>
   );
 }

@@ -13,6 +13,8 @@ export const siteConfig = {
   phone: env.VITE_CONTACT_PHONE || '',
   whatsapp: env.VITE_WHATSAPP_NUMBER || '',
   linkedin: env.VITE_LINKEDIN_URL || '',
+  facebook: env.VITE_FACEBOOK_URL || '',
+  instagram: env.VITE_INSTAGRAM_URL || '',
   contactEndpoint: env.VITE_CONTACT_ENDPOINT || '',
 };
 
@@ -41,19 +43,22 @@ export function getContactChannels() {
     channels.push({
       key: 'whatsapp',
       label: 'WhatsApp',
-      value: 'Écrire sur WhatsApp',
+      value: siteConfig.whatsapp,
       href: `https://wa.me/${siteConfig.whatsapp.replace(/\D/g, '')}`,
     });
   }
 
-  if (siteConfig.linkedin) {
-    channels.push({
-      key: 'linkedin',
-      label: 'LinkedIn',
-      value: 'Profil LinkedIn',
-      href: siteConfig.linkedin,
-    });
-  }
-
   return channels;
+}
+
+/**
+ * Réseaux sociaux, distincts des moyens de contact : ils vivent dans le pied
+ * de page. Chaque URL absente retire simplement son icône.
+ */
+export function getSocialLinks() {
+  return [
+    { key: 'linkedin', label: 'LinkedIn', href: siteConfig.linkedin },
+    { key: 'facebook', label: 'Facebook', href: siteConfig.facebook },
+    { key: 'instagram', label: 'Instagram', href: siteConfig.instagram },
+  ].filter((link) => link.href);
 }

@@ -1,5 +1,7 @@
 import { useState } from 'react';
+import { AlertCircle, CheckCircle2, ChevronDown, Info } from 'lucide-react';
 import Button from './ui/Button.jsx';
+import Reveal from './ui/Reveal.jsx';
 import { siteConfig } from '../config/site.js';
 
 /**
@@ -20,6 +22,8 @@ const projectTypes = [
   'Autre',
 ];
 
+const MESSAGE_MIN = 20;
+
 const initialValues = {
   name: '',
   email: '',
@@ -33,36 +37,88 @@ const initialValues = {
 function validate(values) {
   const errors = {};
   if (!values.name.trim()) errors.name = 'Indiquez votre nom.';
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(values.email.trim())) errors.email = 'Adresse e-mail invalide.';
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(values.email.trim())) {
+    errors.email = 'Adresse e-mail invalide.';
+  }
   if (!values.projectType) errors.projectType = 'Choisissez un type de projet.';
-  if (values.message.trim().length < 20) {
-    errors.message = 'Décrivez votre besoin en quelques phrases (20 caractères minimum).';
+  if (values.message.trim().length < MESSAGE_MIN) {
+    errors.message = `Décrivez votre besoin en quelques phrases (${MESSAGE_MIN} caractères minimum).`;
   }
   return errors;
 }
 
-function inputClass(hasError) {
-  return `mt-2 w-full rounded-lg border bg-bg px-4 py-3 text-text placeholder:text-muted/60 outline-none transition focus:border-accent focus:ring-2 focus:ring-accent/20 ${
-    hasError ? 'border-red-500' : 'border-border'
-  }`;
-}
+/* Champ à étiquette flottante : l'intitulé reste lisible même une fois le champ rempli. */
+const fieldBase =
+  'peer w-full rounded-2xl border bg-bg px-4 pb-2.5 pt-7 text-[15px] text-text outline-none transition duration-200';
 
-function Field({ id, label, error, required, children, className = '' }) {
+function Field({ id, label, error, hint, filled, variant = 'input', className = '', children }) {
+  const floating = variant === 'input';
+
   return (
-    <div className={className}>
-      <label htmlFor={id} className="text-sm font-medium">
-        {label}
-        {required ? ' *' : ' (facultatif)'}
-      </label>
-      {children}
-      {error && (
-        <p id={`${id}-error`} className="mt-1.5 text-sm text-red-600 dark:text-red-400">
+    <div
+      className={`group relative ${className}`}
+      data-filled={filled ? 'true' : 'false'}
+    >
+      <div className="relative">
+        {children}
+
+        <label
+          htmlFor={id}
+          className={`pointer-events-none absolute left-4 text-[15px] text-muted transition-all duration-200 ease-apple group-focus-within:text-[11px] group-data-[filled=true]:text-[11px] ${
+            floating
+              ? 'top-1/2 -translate-y-1/2 group-focus-within:top-2.5 group-focus-within:translate-y-0 group-data-[filled=true]:top-2.5 group-data-[filled=true]:translate-y-0'
+              : 'top-2.5 text-[11px]'
+          }`}
+        >
+          {label}
+        </label>
+
+        {variant === 'select' && (
+          <ChevronDown
+            size={16}
+            aria-hidden="true"
+            className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-muted"
+          />
+        )}
+      </div>
+
+      {error ? (
+        <p
+          id={`${id}-error`}
+          className="mt-1.5 flex items-center gap-1.5 pl-1 text-[13px] text-red-600 dark:text-red-400"
+        >
+          <AlertCircle size={13} aria-hidden="true" />
           {error}
         </p>
+      ) : (
+        hint && (
+          <p id={`${id}-hint`} className="mt-1.5 pl-1 text-[13px] text-muted">
+            {hint}
+          </p>
+        )
       )}
     </div>
   );
 }
+
+const statusStyles = {
+  success: 'bg-accent-soft text-accent-text',
+  error: 'bg-red-50 text-red-700 dark:bg-red-950/40 dark:text-red-300',
+  unconfigured: 'border hairline text-muted',
+};
+
+const statusIcons = {
+  success: CheckCircle2,
+  error: AlertCircle,
+  unconfigured: Info,
+};
+
+const statusMessages = {
+  success: 'Merci. Votre demande est bien arrivée, nous revenons vers vous rapidement.',
+  error: 'L’envoi a échoué. Réessayez dans quelques instants ou contactez-nous directement.',
+  unconfigured:
+    'L’envoi automatique est temporairement indisponible. Écrivez-nous par e-mail ou sur WhatsApp, via les coordonnées ci-contre.',
+};
 
 export default function ContactForm() {
   const [values, setValues] = useState(initialValues);
@@ -81,7 +137,12 @@ export default function ContactForm() {
 
     const found = validate(values);
     setErrors(found);
-    if (Object.keys(found).length > 0) return;
+    if (Object.keys(found).length > 0) {
+      // Amène directement le visiteur au premier champ à corriger.
+      const [first] = Object.keys(found);
+      document.getElementById(first)?.focus();
+      return;
+    }
 
     if (!siteConfig.contactEndpoint) {
       setStatus('unconfigured');
@@ -104,17 +165,33 @@ export default function ContactForm() {
     }
   };
 
-  const describedBy = (name) => (errors[name] ? `${name}-error` : undefined);
+  const describedBy = (name, extra) => (errors[name] ? `${name}-error` : extra);
+
+  const inputClass = (name) =>
+    `${fieldBase} ${
+      errors[name]
+        ? 'border-red-400 focus:border-red-500'
+        : 'hairline focus:border-accent focus:ring-4 focus:ring-accent/15'
+    }`;
+
+  const remaining = Math.max(0, MESSAGE_MIN - values.message.trim().length);
+  const StatusIcon = statusIcons[status];
 
   return (
-    <form
+    <Reveal
+      as="form"
       noValidate
       onSubmit={handleSubmit}
-      className="rounded-2xl border border-border bg-surface p-6 sm:p-8"
       aria-describedby="form-status"
+      className="rounded-4xl border hairline bg-surface p-7 shadow-card sm:p-9"
     >
-      <div className="grid gap-5 sm:grid-cols-2">
-        <Field id="name" label="Nom" required error={errors.name}>
+      <p className="text-[13px] text-muted">
+        Les champs indiqués <span className="font-medium text-text">facultatif</span> peuvent rester
+        vides.
+      </p>
+
+      <div className="mt-6 grid gap-4 sm:grid-cols-2">
+        <Field id="name" label="Votre nom" error={errors.name} filled={values.name !== ''}>
           <input
             id="name"
             name="name"
@@ -124,11 +201,11 @@ export default function ContactForm() {
             onChange={handleChange}
             aria-invalid={Boolean(errors.name)}
             aria-describedby={describedBy('name')}
-            className={inputClass(errors.name)}
+            className={inputClass('name')}
           />
         </Field>
 
-        <Field id="email" label="Adresse e-mail" required error={errors.email}>
+        <Field id="email" label="Adresse e-mail" error={errors.email} filled={values.email !== ''}>
           <input
             id="email"
             name="email"
@@ -138,11 +215,11 @@ export default function ContactForm() {
             onChange={handleChange}
             aria-invalid={Boolean(errors.email)}
             aria-describedby={describedBy('email')}
-            className={inputClass(errors.email)}
+            className={inputClass('email')}
           />
         </Field>
 
-        <Field id="company" label="Entreprise">
+        <Field id="company" label="Entreprise (facultatif)" filled={values.company !== ''}>
           <input
             id="company"
             name="company"
@@ -150,11 +227,17 @@ export default function ContactForm() {
             autoComplete="organization"
             value={values.company}
             onChange={handleChange}
-            className={inputClass(false)}
+            className={inputClass('company')}
           />
         </Field>
 
-        <Field id="projectType" label="Type de projet" required error={errors.projectType}>
+        <Field
+          id="projectType"
+          label="Type de projet"
+          error={errors.projectType}
+          filled
+          variant="select"
+        >
           <select
             id="projectType"
             name="projectType"
@@ -162,7 +245,9 @@ export default function ContactForm() {
             onChange={handleChange}
             aria-invalid={Boolean(errors.projectType)}
             aria-describedby={describedBy('projectType')}
-            className={inputClass(errors.projectType)}
+            className={`${inputClass('projectType')} appearance-none pr-11 ${
+              values.projectType === '' ? 'text-muted' : ''
+            }`}
           >
             <option value="">Sélectionnez un type de projet</option>
             {projectTypes.map((type) => (
@@ -173,19 +258,37 @@ export default function ContactForm() {
           </select>
         </Field>
 
-        <Field id="budget" label="Budget indicatif" className="sm:col-span-2">
+        <Field
+          id="budget"
+          label="Budget indicatif (facultatif)"
+          hint="Une fourchette suffit, rien n’est imposé."
+          filled={values.budget !== ''}
+          className="sm:col-span-2"
+        >
           <input
             id="budget"
             name="budget"
             type="text"
             value={values.budget}
             onChange={handleChange}
-            placeholder="Ex. : une fourchette ou un montant approximatif"
-            className={inputClass(false)}
+            aria-describedby={describedBy('budget', 'budget-hint')}
+            className={inputClass('budget')}
           />
         </Field>
 
-        <Field id="message" label="Description du besoin" required error={errors.message} className="sm:col-span-2">
+        <Field
+          id="message"
+          label="Votre besoin"
+          error={errors.message}
+          hint={
+            remaining > 0
+              ? `Encore ${remaining} caractère${remaining > 1 ? 's' : ''} pour décrire votre besoin.`
+              : 'Merci, c’est assez clair pour commencer.'
+          }
+          filled={values.message !== ''}
+          variant="area"
+          className="sm:col-span-2"
+        >
           <textarea
             id="message"
             name="message"
@@ -193,8 +296,8 @@ export default function ContactForm() {
             value={values.message}
             onChange={handleChange}
             aria-invalid={Boolean(errors.message)}
-            aria-describedby={describedBy('message')}
-            className={inputClass(errors.message)}
+            aria-describedby={describedBy('message', 'message-hint')}
+            className={`${inputClass('message')} resize-y`}
           />
         </Field>
       </div>
@@ -202,31 +305,36 @@ export default function ContactForm() {
       {/* Champ piège : masqué aux visiteurs, rempli uniquement par les robots. */}
       <div className="hidden" aria-hidden="true">
         <label htmlFor="website">Ne pas remplir</label>
-        <input id="website" name="website" type="text" tabIndex={-1} autoComplete="off" value={values.website} onChange={handleChange} />
+        <input
+          id="website"
+          name="website"
+          type="text"
+          tabIndex={-1}
+          autoComplete="off"
+          value={values.website}
+          onChange={handleChange}
+        />
       </div>
 
       <div id="form-status" role="status" aria-live="polite" className="mt-6 empty:hidden">
-        {status === 'success' && (
-          <p className="rounded-lg bg-accent-soft px-4 py-3 text-sm text-accent">
-            Merci. Votre demande a bien été envoyée, nous revenons vers vous rapidement.
-          </p>
-        )}
-        {status === 'error' && (
-          <p className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-700 dark:bg-red-950/40 dark:text-red-300">
-            L’envoi a échoué. Réessayez dans quelques instants ou contactez-nous directement.
-          </p>
-        )}
-        {status === 'unconfigured' && (
-          <p className="rounded-lg border border-border px-4 py-3 text-sm text-muted">
-            L’envoi automatique du formulaire est temporairement indisponible. Merci de nous écrire directement par
-            e-mail ou sur WhatsApp, via les coordonnées ci-contre.
+        {StatusIcon && statusMessages[status] && (
+          <p
+            className={`flex items-start gap-2.5 rounded-2xl px-4 py-3.5 text-[15px] ${statusStyles[status]}`}
+          >
+            <StatusIcon size={17} aria-hidden="true" className="mt-0.5 shrink-0" />
+            {statusMessages[status]}
           </p>
         )}
       </div>
 
-      <Button type="submit" disabled={status === 'sending'} className="mt-6 w-full sm:w-auto">
+      <Button
+        type="submit"
+        size="lg"
+        disabled={status === 'sending'}
+        className="mt-7 w-full sm:w-auto"
+      >
         {status === 'sending' ? 'Envoi en cours…' : 'Envoyer ma demande'}
       </Button>
-    </form>
+    </Reveal>
   );
 }

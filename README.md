@@ -46,7 +46,9 @@ Toutes les coordonnées et intégrations sont dans `.env` (variables `VITE_*`). 
 | `VITE_CONTACT_EMAIL` | Adresse e-mail affichée et lien `mailto:` |
 | `VITE_CONTACT_PHONE` | Téléphone au format international, ex. `+261 34 00 000 00` |
 | `VITE_WHATSAPP_NUMBER` | Numéro WhatsApp en format international |
-| `VITE_LINKEDIN_URL` | Lien vers le profil ou la page entreprise |
+| `VITE_LINKEDIN_URL` | Page LinkedIn de l'entreprise |
+| `VITE_FACEBOOK_URL` | Page Facebook |
+| `VITE_INSTAGRAM_URL` | Compte Instagram |
 | `VITE_CONTACT_ENDPOINT` | Endpoint POST JSON du formulaire (future API Laravel) |
 
 Les variables `VITE_*` sont intégrées au build : après toute modification de `.env`, relancer `npm run build`.
@@ -58,6 +60,12 @@ Les variables `VITE_*` sont intégrées au build : après toute modification de 
 - Les tranches de budget sont en champ libre : rien n’est imposé.
 - Mentions légales : à ajouter selon le statut juridique de l’activité.
 - Présentation des membres de l’équipe : à ajouter uniquement avec leurs noms et rôles validés.
+
+## Marque et réseaux sociaux
+
+Logos, avatars et bannières : `public/brand/` (voir le README du dossier).
+Procédure d'ouverture des comptes LinkedIn, Facebook et Instagram, avec les textes
+prêts à coller : `docs/reseaux-sociaux.md`.
 
 ## Formulaire de contact
 

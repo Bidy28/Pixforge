@@ -5,6 +5,7 @@ import Footer from './components/Footer.jsx';
 import Home from './pages/Home.jsx';
 import ProjectDetail from './pages/ProjectDetail.jsx';
 import NotFound from './pages/NotFound.jsx';
+import useReveal from './hooks/useReveal.js';
 
 /** Gère le défilement : vers l'ancre si présente, sinon en haut de page. */
 function ScrollManager() {
@@ -26,13 +27,15 @@ function ScrollManager() {
 }
 
 export default function App() {
+  useReveal();
+
   return (
     <div className="flex min-h-screen flex-col">
       <ScrollManager />
 
       <a
         href="#contenu"
-        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[60] focus:rounded-lg focus:bg-accent focus:px-4 focus:py-2 focus:text-accent-contrast"
+        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[80] focus:rounded-full focus:bg-accent focus:px-5 focus:py-2.5 focus:text-sm focus:font-medium focus:text-accent-contrast"
       >
         Aller au contenu
       </a>

@@ -11,10 +11,11 @@ export default function ThemeToggle() {
       type="button"
       onClick={toggle}
       aria-label={label}
+      aria-pressed={isDark}
       title={label}
-      className="inline-flex h-11 w-11 items-center justify-center rounded-lg border border-border bg-surface text-text transition hover:border-accent hover:text-accent"
+      className="inline-flex h-9 w-9 items-center justify-center rounded-full text-muted transition duration-300 ease-apple hover:bg-surface-2 hover:text-text"
     >
-      {isDark ? <Sun size={18} aria-hidden="true" /> : <Moon size={18} aria-hidden="true" />}
+      {isDark ? <Sun size={17} aria-hidden="true" /> : <Moon size={17} aria-hidden="true" />}
     </button>
   );
 }

@@ -1,33 +1,64 @@
-import { ArrowRight } from 'lucide-react';
+import { ChevronDown } from 'lucide-react';
 import Button from './ui/Button.jsx';
+import TextLink from './ui/TextLink.jsx';
+import Reveal from './ui/Reveal.jsx';
 import DashboardMockup from './DashboardMockup.jsx';
 
 export default function Hero() {
   return (
     <section className="relative overflow-hidden">
-      <div className="mx-auto grid max-w-6xl items-center gap-12 px-5 pb-20 pt-14 sm:px-8 sm:pt-20 lg:grid-cols-2 lg:gap-16 lg:pb-28 lg:pt-24">
-        <div className="animate-fade-up">
-          <p className="text-sm font-semibold uppercase tracking-widest text-accent">
-            Studio de développement web
-          </p>
-          <h1 className="mt-4 text-4xl font-extrabold leading-tight tracking-tight text-balance sm:text-5xl lg:text-6xl">
-            Nous transformons vos idées en solutions numériques performantes.
-          </h1>
-          <p className="mt-6 max-w-xl text-lg leading-relaxed text-muted">
-            Sites web, applications métier et solutions sur mesure : PixForge accompagne les entreprises dans la
-            conception et le développement de leurs projets numériques.
-          </p>
-          <div className="mt-10 flex flex-col gap-3 sm:flex-row">
-            <Button to="/#realisations" variant="secondary">
-              Découvrir nos réalisations
-              <ArrowRight size={16} aria-hidden="true" />
+      {/* Halo discret derrière le titre, pour centrer le regard. */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 -top-40 h-[460px] bg-[radial-gradient(60%_60%_at_50%_50%,rgb(var(--accent)/0.12),transparent_70%)]"
+      />
+
+      <div className="relative mx-auto max-w-content px-6 pb-20 pt-20 sm:px-8 sm:pt-28">
+        <div className="mx-auto max-w-3xl text-center">
+          <Reveal>
+            <p className="text-sm font-semibold tracking-tight text-accent-text">
+              Studio de développement web
+            </p>
+          </Reveal>
+
+          <Reveal delay={80}>
+            <h1 className="mt-3 text-[2.5rem] font-semibold leading-[1.05] text-balance sm:text-6xl lg:text-[4.25rem]">
+              Vos idées, transformées en logiciels qui tournent.
+            </h1>
+          </Reveal>
+
+          <Reveal delay={160}>
+            <p className="mx-auto mt-6 max-w-xl text-lg leading-relaxed text-muted sm:text-xl">
+              Sites web, applications métier et API sur mesure. Nous concevons, développons et
+              accompagnons vos projets numériques de bout en bout.
+            </p>
+          </Reveal>
+
+          <Reveal
+            delay={240}
+            className="mt-9 flex flex-col items-center justify-center gap-4 sm:flex-row sm:gap-6"
+          >
+            <Button to="/#contact" size="lg" className="w-full sm:w-auto">
+              Parlons de votre projet
             </Button>
-            <Button to="/#contact">Parlons de votre projet</Button>
-          </div>
+            <TextLink to="/#realisations" className="text-base">
+              Voir nos réalisations
+            </TextLink>
+          </Reveal>
         </div>
 
-        <div className="animate-fade-up [animation-delay:150ms]">
+        <Reveal delay={320} className="relative mt-16 sm:mt-20">
           <DashboardMockup />
+        </Reveal>
+
+        <div className="mt-14 flex justify-center">
+          <a
+            href="#services"
+            aria-label="Aller à la section Services"
+            className="animate-float-hint inline-flex h-10 w-10 items-center justify-center rounded-full text-muted transition hover:text-text"
+          >
+            <ChevronDown size={20} aria-hidden="true" />
+          </a>
         </div>
       </div>
     </section>
