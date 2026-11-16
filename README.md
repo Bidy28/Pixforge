@@ -44,12 +44,14 @@ Toutes les coordonnées et intégrations sont dans `.env` (variables `VITE_*`). 
 | Variable | Rôle |
 | --- | --- |
 | `VITE_CONTACT_EMAIL` | Adresse e-mail affichée et lien `mailto:` |
-| `VITE_CONTACT_PHONE` | Téléphone au format international, ex. `+261 34 00 000 00` |
+| `VITE_CONTACT_PHONE` | Téléphone au format international, ex. `+261 34 00 000 00`. Plusieurs numéros : séparés par une virgule |
 | `VITE_WHATSAPP_NUMBER` | Numéro WhatsApp en format international |
 | `VITE_LINKEDIN_URL` | Page LinkedIn de l'entreprise |
 | `VITE_FACEBOOK_URL` | Page Facebook |
 | `VITE_INSTAGRAM_URL` | Compte Instagram |
-| `VITE_CONTACT_ENDPOINT` | Endpoint POST JSON du formulaire (future API Laravel) |
+| `VITE_EMAILJS_SERVICE_ID` | ID du service EmailJS |
+| `VITE_EMAILJS_TEMPLATE_ID` | ID du template EmailJS |
+| `VITE_EMAILJS_PUBLIC_KEY` | Clé publique EmailJS (Account → API keys) |
 
 Les variables `VITE_*` sont intégrées au build : après toute modification de `.env`, relancer `npm run build`.
 
@@ -69,7 +71,7 @@ prêts à coller : `docs/reseaux-sociaux.md`.
 
 ## Formulaire de contact
 
-Sans `VITE_CONTACT_ENDPOINT`, le formulaire valide les champs mais n’envoie rien et affiche un message honnête. Pour le brancher, l’endpoint doit accepter un `POST` en JSON avec `name`, `email`, `company`, `projectType`, `budget`, `message`, et répondre avec un code 2xx en cas de succès. Le contrat est documenté dans `src/components/ContactForm.jsx`.
+Le formulaire envoie via [EmailJS](https://www.emailjs.com/). Sans les trois variables `VITE_EMAILJS_*`, il valide les champs mais n’envoie rien et affiche un message honnête. Le template EmailJS peut utiliser `{{name}}`, `{{email}}`, `{{company}}`, `{{projectType}}`, `{{budget}}` et `{{message}}` (pensez à mettre `{{email}}` en *Reply-To*).
 
 ## Structure
 

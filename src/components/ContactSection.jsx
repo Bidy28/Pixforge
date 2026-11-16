@@ -35,7 +35,7 @@ export default function ContactSection() {
                   const Icon = icons[channel.key];
                   const external = channel.href.startsWith('http');
                   return (
-                    <li key={channel.key} className="border-b hairline last:border-0">
+                    <li key={channel.href} className="border-b hairline last:border-0">
                       <a
                         href={channel.href}
                         target={external ? '_blank' : undefined}

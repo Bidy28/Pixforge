@@ -64,7 +64,7 @@ export default function Footer() {
               {channels.map((channel) => {
                 const external = channel.href.startsWith('http');
                 return (
-                  <li key={channel.key}>
+                  <li key={channel.href}>
                     <a
                       href={channel.href}
                       target={external ? '_blank' : undefined}

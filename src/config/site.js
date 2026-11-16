@@ -15,7 +15,12 @@ export const siteConfig = {
   linkedin: env.VITE_LINKEDIN_URL || '',
   facebook: env.VITE_FACEBOOK_URL || '',
   instagram: env.VITE_INSTAGRAM_URL || '',
-  contactEndpoint: env.VITE_CONTACT_ENDPOINT || '',
+  // EmailJS : les trois valeurs sont nécessaires pour activer le formulaire.
+  emailjs: {
+    serviceId: env.VITE_EMAILJS_SERVICE_ID || '',
+    templateId: env.VITE_EMAILJS_TEMPLATE_ID || '',
+    publicKey: env.VITE_EMAILJS_PUBLIC_KEY || '',
+  },
 };
 
 export function getContactChannels() {
@@ -30,14 +35,19 @@ export function getContactChannels() {
     });
   }
 
-  if (siteConfig.phone) {
-    channels.push({
-      key: 'phone',
-      label: 'Téléphone',
-      value: siteConfig.phone,
-      href: `tel:${siteConfig.phone.replace(/\s/g, '')}`,
+  // Plusieurs numéros possibles, séparés par une virgule dans VITE_CONTACT_PHONE.
+  siteConfig.phone
+    .split(',')
+    .map((phone) => phone.trim())
+    .filter(Boolean)
+    .forEach((phone) => {
+      channels.push({
+        key: 'phone',
+        label: 'Téléphone',
+        value: phone,
+        href: `tel:${phone.replace(/\s/g, '')}`,
+      });
     });
-  }
 
   if (siteConfig.whatsapp) {
     channels.push({

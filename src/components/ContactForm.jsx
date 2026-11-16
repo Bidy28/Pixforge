@@ -1,16 +1,18 @@
 import { useState } from 'react';
+import emailjs from '@emailjs/browser';
 import { AlertCircle, CheckCircle2, ChevronDown, Info } from 'lucide-react';
 import Button from './ui/Button.jsx';
 import Reveal from './ui/Reveal.jsx';
 import { siteConfig } from '../config/site.js';
 
 /**
- * Contrat d'intégration (à brancher sur l'API Laravel plus tard) :
- * POST siteConfig.contactEndpoint, Content-Type application/json,
- * corps : { name, email, company, projectType, budget, message }.
- * Réponse 2xx = succès. Tout autre code = erreur affichée à l'utilisateur.
- * Sans endpoint configuré, aucun envoi n'est simulé.
+ * Envoi via EmailJS (siteConfig.emailjs).
+ * Variables disponibles dans le template EmailJS :
+ * {{name}}, {{email}}, {{company}}, {{projectType}}, {{budget}}, {{message}}.
+ * Sans configuration complète, aucun envoi n'est simulé.
  */
+const { serviceId, templateId, publicKey } = siteConfig.emailjs;
+const emailjsReady = Boolean(serviceId && templateId && publicKey);
 const projectTypes = [
   'Site vitrine',
   'Site professionnel',
@@ -144,7 +146,7 @@ export default function ContactForm() {
       return;
     }
 
-    if (!siteConfig.contactEndpoint) {
+    if (!emailjsReady) {
       setStatus('unconfigured');
       return;
     }
@@ -152,12 +154,16 @@ export default function ContactForm() {
     setStatus('sending');
     try {
       const { website, ...payload } = values;
-      const response = await fetch(siteConfig.contactEndpoint, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-        body: JSON.stringify(payload),
-      });
-      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      await emailjs.send(
+        serviceId,
+        templateId,
+        {
+          ...payload,
+          company: payload.company || '—',
+          budget: payload.budget || '—',
+        },
+        { publicKey },
+      );
       setValues(initialValues);
       setStatus('success');
     } catch {

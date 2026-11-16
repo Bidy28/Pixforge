@@ -1,0 +1,78 @@
+<!-- Template EmailJS « Contact Us » : coller dans Edit Content → bouton Code (<>). -->
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#f5f5f7;padding:32px 12px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;">
+  <tr>
+    <td align="center">
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width:600px;background:#ffffff;border-radius:18px;overflow:hidden;border:1px solid #e5e5ea;">
+
+        <!-- En-tête -->
+        <tr>
+          <td style="background:#0071e3;padding:24px 32px;">
+            <p style="margin:0;font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:#cfe3fb;">PixForge · Formulaire de contact</p>
+            <h1 style="margin:6px 0 0;font-size:22px;line-height:1.3;color:#ffffff;font-weight:600;">Nouvelle demande : {{projectType}}</h1>
+          </td>
+        </tr>
+
+        <!-- Intro -->
+        <tr>
+          <td style="padding:28px 32px 8px;">
+            <p style="margin:0;font-size:15px;line-height:1.6;color:#1d1d1f;">
+              <strong>{{name}}</strong> vient d’envoyer une demande depuis le site.
+              Répondez simplement à cet e-mail pour lui écrire directement.
+            </p>
+          </td>
+        </tr>
+
+        <!-- Détails -->
+        <tr>
+          <td style="padding:16px 32px;">
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border:1px solid #e5e5ea;border-radius:14px;">
+              <tr>
+                <td style="padding:12px 16px;font-size:13px;color:#6e6e73;width:130px;border-bottom:1px solid #e5e5ea;">Nom</td>
+                <td style="padding:12px 16px;font-size:15px;color:#1d1d1f;border-bottom:1px solid #e5e5ea;">{{name}}</td>
+              </tr>
+              <tr>
+                <td style="padding:12px 16px;font-size:13px;color:#6e6e73;border-bottom:1px solid #e5e5ea;">E-mail</td>
+                <td style="padding:12px 16px;font-size:15px;border-bottom:1px solid #e5e5ea;"><a href="mailto:{{email}}" style="color:#0066cc;text-decoration:none;">{{email}}</a></td>
+              </tr>
+              <tr>
+                <td style="padding:12px 16px;font-size:13px;color:#6e6e73;border-bottom:1px solid #e5e5ea;">Entreprise</td>
+                <td style="padding:12px 16px;font-size:15px;color:#1d1d1f;border-bottom:1px solid #e5e5ea;">{{company}}</td>
+              </tr>
+              <tr>
+                <td style="padding:12px 16px;font-size:13px;color:#6e6e73;border-bottom:1px solid #e5e5ea;">Type de projet</td>
+                <td style="padding:12px 16px;font-size:15px;color:#1d1d1f;border-bottom:1px solid #e5e5ea;">{{projectType}}</td>
+              </tr>
+              <tr>
+                <td style="padding:12px 16px;font-size:13px;color:#6e6e73;">Budget</td>
+                <td style="padding:12px 16px;font-size:15px;color:#1d1d1f;">{{budget}}</td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+
+        <!-- Message -->
+        <tr>
+          <td style="padding:8px 32px 8px;">
+            <p style="margin:0 0 8px;font-size:13px;color:#6e6e73;">Besoin décrit</p>
+            <div style="background:#e8f1fd;border-radius:14px;padding:16px 18px;font-size:15px;line-height:1.6;color:#1d1d1f;white-space:pre-line;">{{message}}</div>
+          </td>
+        </tr>
+
+        <!-- Bouton -->
+        <tr>
+          <td style="padding:24px 32px 32px;">
+            <a href="mailto:{{email}}?subject=Re%20:%20votre%20demande%20PixForge" style="display:inline-block;background:#0071e3;color:#ffffff;font-size:15px;font-weight:600;text-decoration:none;padding:12px 24px;border-radius:999px;">Répondre à {{name}}</a>
+          </td>
+        </tr>
+
+        <!-- Pied -->
+        <tr>
+          <td style="padding:16px 32px;background:#f5f5f7;font-size:12px;line-height:1.5;color:#86868b;">
+            E-mail envoyé automatiquement par le formulaire de contact du site PixForge.
+          </td>
+        </tr>
+
+      </table>
+    </td>
+  </tr>
+</table>
